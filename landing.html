@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinSight AI — Financial Intelligence for Every Business</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0A2342; --green: #1D9E75; --green-light: #E1F5EE;
+    --green-mid: #9FE1CB; --white: #FFFFFF; --off-white: #F8F9F6;
+    --gray-400: #888780; --gray-700: #444441; --text: #1a1a18;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.25rem 2rem; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06); }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo-icon { width: 32px; height: 32px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+  .nav-logo-icon svg { width: 18px; height: 18px; fill: none; stroke: var(--green); stroke-width: 2; }
+  .nav-logo-text { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--navy); }
+  .nav-logo-text span { color: var(--green); }
+  .nav-links { display: flex; align-items: center; gap: 2rem; }
+  .nav-links a { text-decoration: none; font-size: 14px; color: var(--gray-700); transition: color 0.2s; }
+  .nav-links a:hover { color: var(--navy); }
+  .nav-cta { background: var(--navy); color: white; padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--green); }
+
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 2rem 4rem; position: relative; overflow: hidden; background: var(--navy); }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 70% 50%, rgba(29,158,117,0.15) 0%, transparent 70%); }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(29,158,117,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(29,158,117,0.06) 1px, transparent 1px); background-size: 60px 60px; }
+  .hero-content { position: relative; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; width: 100%; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(29,158,117,0.15); border: 1px solid rgba(29,158,117,0.3); border-radius: 100px; padding: 6px 16px; font-size: 13px; color: var(--green-mid); margin-bottom: 1.5rem; }
+  .hero-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 4vw, 3.8rem); font-weight: 700; color: white; line-height: 1.15; margin-bottom: 1.5rem; }
+  .hero h1 em { font-style: normal; color: var(--green); }
+  .hero p { font-size: 17px; color: rgba(255,255,255,0.65); line-height: 1.7; margin-bottom: 2.5rem; font-weight: 300; }
+  .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { background: var(--green); color: white; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 500; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; border: none; cursor: pointer; }
+  .btn-primary:hover { background: #17875f; transform: translateY(-1px); }
+  .btn-secondary { background: transparent; color: white; padding: 14px 28px; border-radius: 10px; font-size: 15px; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); transition: all 0.2s; }
+  .btn-secondary:hover { border-color: rgba(255,255,255,0.5); }
+  .hero-stats { display: flex; gap: 2rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); }
+  .hero-stat-number { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: white; }
+  .hero-stat-label { font-size: 13px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+  .hero-app { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.4); }
+  .app-topbar { background: var(--off-white); padding: 12px 16px; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid #eee; }
+  .app-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .app-dot.r{background:#ff5f56} .app-dot.y{background:#ffbd2e} .app-dot.g{background:#27c93f}
+  .app-url { flex:1; background:white; border-radius:6px; padding:4px 12px; font-size:11px; color:var(--gray-400); margin:0 8px; border:1px solid #eee; }
+  .app-body { padding: 1.5rem; }
+  .app-header { display:flex; align-items:center; gap:8px; margin-bottom:1rem; }
+  .app-logo-sm { width:28px;height:28px;background:var(--navy);border-radius:6px;display:flex;align-items:center;justify-content:center; }
+  .app-logo-sm svg { width:16px;height:16px;fill:none;stroke:var(--green);stroke-width:2; }
+  .app-brand { font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--navy); }
+  .app-result { background:var(--off-white);border-radius:12px;padding:1rem; }
+  .app-result-header { display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem; }
+  .app-company { font-size:13px;font-weight:500;color:var(--navy); }
+  .badge-healthy { background:#eafaf1;color:#1e8449;font-size:11px;font-weight:500;padding:3px 10px;border-radius:100px; }
+  .app-summary { font-size:12px;color:var(--gray-700);line-height:1.5;margin-bottom:0.75rem; }
+  .app-metrics { display:grid;grid-template-columns:repeat(3,1fr);gap:8px; }
+  .app-metric { background:white;border-radius:8px;padding:8px;border:1px solid #eee; }
+  .app-metric-value { font-size:16px;font-weight:600;color:var(--navy); }
+  .app-metric-label { font-size:10px;color:var(--gray-400);margin-top:2px; }
+  .app-flags { display:flex;gap:6px;flex-wrap:wrap;margin-top:0.75rem; }
+  .flag-g{background:#eafaf1;color:#1e8449;font-size:11px;padding:4px 10px;border-radius:6px;}
+  .flag-r{background:#fdecea;color:#c0392b;font-size:11px;padding:4px 10px;border-radius:6px;}
+  .flag-b{background:#eaf4fc;color:#1a6fa3;font-size:11px;padding:4px 10px;border-radius:6px;}
+
+  /* SCORE METER */
+  .score-meter { background: var(--off-white); border-radius: 12px; padding: 1rem; margin-top: 0.75rem; }
+  .score-label { font-size:11px;color:var(--gray-400);margin-bottom:6px; }
+  .score-bar { height:8px;background:#eee;border-radius:100px;overflow:hidden; }
+  .score-fill { height:100%;background:linear-gradient(90deg,var(--green),#2dd4a4);border-radius:100px;width:78%;transition:width 1s ease; }
+  .score-value { font-size:13px;font-weight:600;color:var(--navy);margin-top:4px; }
+
+  section { padding: 6rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-badge { display:inline-block;background:var(--green-light);color:var(--green);font-size:12px;font-weight:500;padding:4px 14px;border-radius:100px;margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.08em; }
+  .section-title { font-family:'Playfair Display',serif;font-size:clamp(2rem,3vw,2.8rem);font-weight:700;color:var(--navy);line-height:1.2;margin-bottom:1rem; }
+  .section-subtitle { font-size:17px;color:var(--gray-400);line-height:1.7;max-width:560px;font-weight:300; }
+
+  .how-it-works { background: var(--off-white); }
+  .steps-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;margin-top:3.5rem; }
+  .step-card { background:white;border-radius:16px;padding:2rem;border:1px solid #eee; }
+  .step-number { font-family:'Playfair Display',serif;font-size:48px;font-weight:700;color:var(--green-light);line-height:1;margin-bottom:1rem; }
+  .step-title { font-size:18px;font-weight:500;color:var(--navy);margin-bottom:0.5rem; }
+  .step-desc { font-size:14px;color:var(--gray-400);line-height:1.6; }
+
+  .features-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin-top:3.5rem; }
+  .feature-card { background:white;border-radius:16px;padding:2rem;border:1px solid #eee;transition:border-color 0.2s,transform 0.2s;position:relative; }
+  .feature-card:hover { border-color:var(--green);transform:translateY(-2px); }
+  .feature-icon { width:44px;height:44px;background:var(--green-light);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem; }
+  .feature-icon svg { width:22px;height:22px;fill:none;stroke:var(--green);stroke-width:1.5; }
+  .feature-title { font-size:17px;font-weight:500;color:var(--navy);margin-bottom:0.5rem; }
+  .feature-desc { font-size:14px;color:var(--gray-400);line-height:1.6; }
+  .coming-soon { position:absolute;top:1.25rem;right:1.25rem;background:#faeeda;color:#ba7517;font-size:10px;font-weight:500;padding:3px 10px;border-radius:100px;text-transform:uppercase;letter-spacing:0.06em; }
+
+  .categories { background: var(--navy); }
+  .categories .section-title { color:white; }
+  .categories .section-subtitle { color:rgba(255,255,255,0.5); }
+  .categories .section-badge { background:rgba(29,158,117,0.15);color:var(--green-mid); }
+  .categories-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3.5rem; }
+  .category-card { background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:2rem;transition:all 0.2s;cursor:pointer;text-decoration:none; }
+  .category-card:hover { background:rgba(29,158,117,0.1);border-color:rgba(29,158,117,0.3);transform:translateY(-2px); }
+  .category-emoji { font-size:32px;margin-bottom:1rem;display:block; }
+  .category-title { font-size:17px;font-weight:500;color:white;margin-bottom:0.5rem; }
+  .category-desc { font-size:13px;color:rgba(255,255,255,0.45);line-height:1.6; }
+
+  .pricing-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:3.5rem; }
+  .pricing-card { background:white;border-radius:20px;padding:1.75rem;border:1.5px solid #eee;position:relative; }
+  .pricing-card.featured { border-color:var(--green);background:var(--navy); }
+  .pricing-popular { position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green);color:white;font-size:11px;font-weight:500;padding:4px 16px;border-radius:100px;white-space:nowrap; }
+  .pricing-plan { font-size:12px;font-weight:500;color:var(--gray-400);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.75rem; }
+  .pricing-card.featured .pricing-plan { color:rgba(255,255,255,0.5); }
+  .pricing-price { font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--navy);line-height:1;margin-bottom:0.25rem; }
+  .pricing-card.featured .pricing-price { color:white; }
+  .pricing-price span { font-size:16px;font-weight:400; }
+  .pricing-period { font-size:12px;color:var(--gray-400);margin-bottom:1.25rem; }
+  .pricing-card.featured .pricing-period { color:rgba(255,255,255,0.45); }
+  .pricing-divider { border:none;border-top:1px solid #eee;margin-bottom:1.25rem; }
+  .pricing-card.featured .pricing-divider { border-color:rgba(255,255,255,0.1); }
+  .pricing-features { list-style:none;margin-bottom:1.5rem; }
+  .pricing-features li { font-size:13px;color:var(--gray-700);padding:5px 0;display:flex;align-items:flex-start;gap:8px;line-height:1.4; }
+  .pricing-card.featured .pricing-features li { color:rgba(255,255,255,0.8); }
+  .check { width:16px;height:16px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px; }
+  .check svg { width:9px;height:9px;fill:none;stroke:var(--green);stroke-width:2.5; }
+  .pricing-card.featured .check { background:rgba(29,158,117,0.25); }
+  .pricing-card.featured .check svg { stroke:var(--green-mid); }
+  .pricing-btn { display:block;width:100%;padding:12px;border-radius:10px;text-align:center;font-size:14px;font-weight:500;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer; }
+  .pricing-btn-outline { background:transparent;border:1.5px solid #ddd;color:var(--navy); }
+  .pricing-btn-outline:hover { border-color:var(--green);color:var(--green); }
+  .pricing-btn-filled { background:var(--green);color:white; }
+  .pricing-btn-filled:hover { background:#17875f; }
+  .pricing-note { text-align:center;font-size:13px;color:var(--gray-400);margin-top:1.5rem; }
+  .pricing-note a { color:var(--green);text-decoration:none; }
+
+  .testimonials { background: var(--off-white); }
+  .testimonials-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3.5rem; }
+  .testimonial-card { background:white;border-radius:16px;padding:1.75rem;border:1px solid #eee; }
+  .testimonial-text { font-size:14px;color:var(--gray-700);line-height:1.7;margin-bottom:1.25rem;font-style:italic; }
+  .testimonial-author { display:flex;align-items:center;gap:10px; }
+  .testimonial-avatar { width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500; }
+  .testimonial-name { font-size:13px;font-weight:500;color:var(--navy); }
+  .testimonial-role { font-size:12px;color:var(--gray-400); }
+  .stars { color:#f4c430;font-size:13px;margin-bottom:0.75rem; }
+
+  .feedback { background: var(--white); }
+  .feedback-inner { max-width:680px;margin:0 auto; }
+  .feedback-tabs { display:flex;margin-bottom:2rem;border:1px solid #eee;border-radius:12px;overflow:hidden; }
+  .feedback-tab { flex:1;padding:12px;font-size:14px;font-weight:500;text-align:center;cursor:pointer;background:white;border:none;color:var(--gray-400);transition:all 0.2s; }
+  .feedback-tab.active { background:var(--navy);color:white; }
+  .feedback-form-wrap { background:var(--off-white);border-radius:16px;padding:2rem; }
+  .feedback-form-wrap label { display:block;font-size:13px;font-weight:500;color:var(--navy);margin-bottom:6px; }
+  .feedback-form-wrap input,.feedback-form-wrap select,.feedback-form-wrap textarea { width:100%;padding:10px 14px;border:1px solid #eee;border-radius:10px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:white;margin-bottom:1rem;outline:none;transition:border-color 0.2s; }
+  .feedback-form-wrap input:focus,.feedback-form-wrap select:focus,.feedback-form-wrap textarea:focus { border-color:var(--green); }
+  .feedback-form-wrap textarea { min-height:100px;resize:vertical; }
+  .feedback-submit { background:var(--navy);color:white;border:none;padding:13px 28px;border-radius:10px;font-size:15px;font-weight:500;cursor:pointer;width:100%;transition:background 0.2s; }
+  .feedback-submit:hover { background:var(--green); }
+  .feedback-success { display:none;text-align:center;padding:2rem; }
+  .feedback-success-icon { width:56px;height:56px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem; }
+  .feedback-success-icon svg { width:28px;height:28px;fill:none;stroke:var(--green);stroke-width:2; }
+  .feedback-success h3 { font-size:18px;font-weight:500;color:var(--navy);margin-bottom:0.5rem; }
+  .feedback-success p { font-size:14px;color:var(--gray-400); }
+
+  .votes-list { display:flex;flex-direction:column;gap:0.75rem; }
+  .vote-item { background:white;border:1px solid #eee;border-radius:12px;padding:1rem 1.25rem;display:flex;align-items:center;gap:1rem;transition:border-color 0.2s; }
+  .vote-item:hover { border-color:var(--green); }
+  .vote-btn { width:48px;height:48px;border:1.5px solid #eee;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:white;transition:all 0.2s;flex-shrink:0; }
+  .vote-btn:hover,.vote-btn.voted { border-color:var(--green);background:var(--green-light); }
+  .vote-arrow { font-size:14px;color:var(--gray-400);line-height:1; }
+  .vote-btn.voted .vote-arrow { color:var(--green); }
+  .vote-count { font-size:13px;font-weight:500;color:var(--navy); }
+  .vote-text { flex:1; }
+  .vote-title { font-size:14px;font-weight:500;color:var(--navy);margin-bottom:2px; }
+  .vote-desc { font-size:12px;color:var(--gray-400); }
+  .vote-tag { font-size:11px;padding:3px 10px;border-radius:100px;flex-shrink:0; }
+  .vote-tag.popular { background:#fdecea;color:#c0392b; }
+  .vote-tag.newf { background:var(--green-light);color:var(--green); }
+
+  .cta-section { background:var(--navy);text-align:center;padding:6rem 2rem; }
+  .cta-section .section-title { color:white;margin:0 auto 1rem; }
+  .cta-section p { color:rgba(255,255,255,0.55);font-size:17px;max-width:500px;margin:0 auto 2.5rem; }
+  .cta-buttons { display:flex;gap:1rem;justify-content:center;flex-wrap:wrap; }
+
+  footer { background:#05131f;color:rgba(255,255,255,0.5);padding:3rem 2rem; }
+  .footer-inner { max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem; }
+  .footer-brand { font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:white; }
+  .footer-brand span { color:var(--green); }
+  .footer-links { display:flex;gap:1.5rem; }
+  .footer-links a { font-size:13px;color:rgba(255,255,255,0.4);text-decoration:none; }
+  .footer-links a:hover { color:white; }
+  .footer-copy { font-size:12px; }
+
+  .chat-widget { position:fixed;bottom:2rem;right:2rem;z-index:1000; }
+  .chat-btn { width:56px;height:56px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(29,158,117,0.4);transition:transform 0.2s;border:none; }
+  .chat-btn:hover { transform:scale(1.08); }
+  .chat-btn svg { width:24px;height:24px;fill:none;stroke:white;stroke-width:2; }
+  .chat-popup { position:absolute;bottom:70px;right:0;width:300px;background:white;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.15);overflow:hidden;display:none; }
+  .chat-popup.open { display:block;animation:popUp 0.2s ease; }
+  @keyframes popUp { from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)} }
+  .chat-popup-header { background:var(--navy);padding:1rem 1.25rem;display:flex;align-items:center;gap:10px; }
+  .chat-avatar { width:36px;height:36px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center; }
+  .chat-avatar svg { width:18px;height:18px;fill:none;stroke:white;stroke-width:2; }
+  .chat-name { font-size:14px;font-weight:500;color:white; }
+  .chat-status { font-size:11px;color:var(--green-mid); }
+  .chat-body { padding:1rem; }
+  .chat-message { background:var(--off-white);border-radius:12px 12px 12px 4px;padding:10px 14px;font-size:13px;color:var(--gray-700);line-height:1.5;margin-bottom:0.75rem; }
+  .chat-options { display:flex;flex-direction:column;gap:6px; }
+  .chat-option { background:white;border:1px solid #eee;border-radius:8px;padding:8px 12px;font-size:12px;color:var(--navy);cursor:pointer;text-align:left;transition:all 0.15s; }
+  .chat-option:hover { border-color:var(--green);color:var(--green);background:var(--green-light); }
+
+  .fade-up { opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease; }
+  .fade-up.visible { opacity:1;transform:translateY(0); }
+
+  @media(max-width:900px){ .pricing-grid{grid-template-columns:repeat(2,1fr)} }
+  @media(max-width:768px){ .hero-content{grid-template-columns:1fr} .hero-app{display:none} .steps-grid,.features-grid,.categories-grid,.testimonials-grid{grid-template-columns:1fr} .pricing-grid{grid-template-columns:1fr} nav .nav-links{display:none} }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+    <span class="nav-logo-text">FinSight <span>AI</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#feedback">Feedback</a>
+  </div>
+  <a href="index.html" class="nav-cta">Try for free →</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-badge"><div class="hero-badge-dot"></div>AI-Powered Financial Intelligence</div>
+      <h1>Your finances,<br><em>finally</em> explained.</h1>
+      <p>Upload your financial statement and get instant plain-English insights, key ratios, red flags, and actionable recommendations — powered by AI.</p>
+      <div class="hero-buttons">
+        <a href="index.html" class="btn-primary">Analyze for free →</a>
+        <a href="#how-it-works" class="btn-secondary">See how it works</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-number">30s</div><div class="hero-stat-label">Average analysis time</div></div>
+        <div><div class="hero-stat-number">Free</div><div class="hero-stat-label">To get started</div></div>
+        <div><div class="hero-stat-number">100%</div><div class="hero-stat-label">Plain English results</div></div>
+      </div>
+    </div>
+    <div class="hero-app">
+      <div class="app-topbar">
+        <div class="app-dot r"></div><div class="app-dot y"></div><div class="app-dot g"></div>
+        <div class="app-url">finsightai.com/analyze</div>
+      </div>
+      <div class="app-body">
+        <div class="app-header">
+          <div class="app-logo-sm"><svg viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+          <span class="app-brand">FinSight AI</span>
+        </div>
+        <div class="app-result">
+          <div class="app-result-header"><span class="app-company">Acme Ltd — FY 2024</span><span class="badge-healthy">Healthy</span></div>
+          <div class="app-summary">Strong profitability with 30% net margin. Conservative debt levels indicate solid financial stability.</div>
+          <div class="app-metrics">
+            <div class="app-metric"><div class="app-metric-value">30%</div><div class="app-metric-label">Net Margin</div></div>
+            <div class="app-metric"><div class="app-metric-value">37.5%</div><div class="app-metric-label">Debt Ratio</div></div>
+            <div class="app-metric"><div class="app-metric-value">2.67x</div><div class="app-metric-label">Asset Cover</div></div>
+          </div>
+          <div class="score-meter">
+            <div class="score-label">Financial Health Score</div>
+            <div class="score-bar"><div class="score-fill" id="scoreBar" style="width:0%"></div></div>
+            <div class="score-value">78 / 100</div>
+          </div>
+          <div class="app-flags">
+            <span class="flag-g">Strong profitability</span>
+            <span class="flag-g">Low leverage</span>
+            <span class="flag-r">Missing cash flow</span>
+            <span class="flag-b">Monitor trends</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-it-works" id="how-it-works">
+  <div class="container">
+    <div class="fade-up">
+      <span class="section-badge">How it works</span>
+      <h2 class="section-title">Three steps to financial clarity</h2>
+      <p class="section-subtitle">No accounting degree required. No confusing jargon. Just clear answers about your money.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card fade-up"><div class="step-number">01</div><div class="step-title">Upload your statement</div><p class="step-desc">Drop in a PDF, Excel file, or simply paste your financial data. We support income statements, balance sheets, cash flow statements and more.</p></div>
+      <div class="step-card fade-up"><div class="step-number">02</div><div class="step-title">AI analyzes instantly</div><p class="step-desc">Our AI reads your financials in seconds, calculating key ratios, identifying patterns, and spotting red flags that matter to your business.</p></div>
+      <div class="step-card fade-up"><div class="step-number">03</div><div class="step-title">Get clear insights</div><p class="step-desc">Receive a plain-English report with strengths, red flags, and specific recommendations — ready to act on immediately.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container">
+    <div class="fade-up">
+      <span class="section-badge">Features</span>
+      <h2 class="section-title">Everything you need to<br>understand your finances</h2>
+      <p class="section-subtitle">Built for SMEs, startups, and entrepreneurs who want financial intelligence without the consultant fees.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-up">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10"/></svg></div>
+        <div class="feature-title">Key Financial Ratios</div>
+        <p class="feature-desc">Automatically calculates profitability, liquidity, leverage, and efficiency ratios with plain-English explanations of what they mean for your business.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+        <div class="feature-title">Red Flag Detection</div>
+        <p class="feature-desc">AI identifies warning signs in your financials before they become serious problems — from cash flow issues to worrying debt levels.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg></div>
+        <div class="feature-title">Financial Forecasting</div>
+        <p class="feature-desc">Project your future financial performance based on current trends. See where your business is headed before it gets there.</p>
+        <span class="coming-soon">Coming soon</span>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+        <div class="feature-title">Download Reports</div>
+        <p class="feature-desc">Export your analysis as a professional PDF or Word document — perfect for sharing with investors, banks, or your team.</p>
+        <span class="coming-soon">Coming soon</span>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></div>
+        <div class="feature-title">Scenario Modeling</div>
+        <p class="feature-desc">Ask "what if?" questions about your finances. See how changes in revenue or costs affect your overall financial health.</p>
+        <span class="coming-soon">Coming soon</span>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
+        <div class="feature-title">Save Your History</div>
+        <p class="feature-desc">Create a free account to save all your analyses, track your financial health over time, and compare periods side by side.</p>
+        <span class="coming-soon">Coming soon</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="categories" id="categories">
+  <div class="container">
+    <div class="fade-up">
+      <span class="section-badge">Solutions</span>
+      <h2 class="section-title">Built for every type of business</h2>
+      <p class="section-subtitle">Whether you're just starting out or scaling up, FinSight AI has the right analysis for your stage.</p>
+    </div>
+    <div class="categories-grid">
+      <a href="index.html" class="category-card fade-up"><span class="category-emoji">🚀</span><div class="category-title">Startups & Founders</div><p class="category-desc">Understand your runway, burn rate, and unit economics. Know exactly where your business stands before your next investor meeting.</p></a>
+      <a href="index.html" class="category-card fade-up"><span class="category-emoji">🏪</span><div class="category-title">SMEs & Small Business</div><p class="category-desc">Get the financial clarity that used to require an expensive accountant. Understand your margins, cash flow, and growth levers.</p></a>
+      <a href="index.html" class="category-card fade-up"><span class="category-emoji">📊</span><div class="category-title">Investors & Analysts</div><p class="category-desc">Quickly analyze multiple companies' financials. Speed up your due diligence with instant AI-powered insights.</p></a>
+      <a href="index.html" class="category-card fade-up"><span class="category-emoji">🏦</span><div class="category-title">Loan & Funding Ready</div><p class="category-desc">Know if you're ready for a bank loan or investor funding before you apply. See exactly what lenders will see in your financials.</p></a>
+      <a href="index.html" class="category-card fade-up"><span class="category-emoji">🎓</span><div class="category-title">Students & Learning</div><p class="category-desc">A powerful learning tool for finance students. Analyze real statements and see how ratios and metrics work in practice.</p></a>
+      <a href="index.html" class="category-card fade-up"><span class="category-emoji">💼</span><div class="category-title">Accountants & Advisors</div><p class="category-desc">Speed up your workflow. Get instant first-pass analysis of client financials before your deep dive consultation.</p></a>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+    <div class="fade-up" style="text-align:center">
+      <span class="section-badge">Pricing</span>
+      <h2 class="section-title">Priced for every business size</h2>
+      <p class="section-subtitle" style="margin:0 auto">From solo entrepreneurs to large enterprises — pay for what you need, scale when you're ready.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card fade-up">
+        <div class="pricing-plan">Free</div>
+        <div class="pricing-price"><span>$</span>0</div>
+        <div class="pricing-period">Forever free</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>3 analyses/month</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Basic ratios</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Red flag detection</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Plain English insights</li>
+        </ul>
+        <a href="index.html" class="pricing-btn pricing-btn-outline">Get started free</a>
+      </div>
+      <div class="pricing-card featured fade-up">
+        <div class="pricing-popular">Most Popular</div>
+        <div class="pricing-plan">Starter</div>
+        <div class="pricing-price"><span>$</span>15</div>
+        <div class="pricing-period">per month · SMEs & freelancers</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>30 analyses/month</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Full financial ratios</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>PDF downloads</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Save history</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Priority support</li>
+        </ul>
+        <a href="index.html" class="pricing-btn pricing-btn-filled">Start free trial</a>
+      </div>
+      <div class="pricing-card fade-up">
+        <div class="pricing-plan">Growth</div>
+        <div class="pricing-price"><span>$</span>49</div>
+        <div class="pricing-period">per month · Growing companies</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Unlimited analyses</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Forecasting & trends</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Scenario modeling</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Team access (3 users)</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>API access</li>
+        </ul>
+        <a href="index.html" class="pricing-btn pricing-btn-outline">Get Growth</a>
+      </div>
+      <div class="pricing-card fade-up">
+        <div class="pricing-plan">Enterprise</div>
+        <div class="pricing-price" style="font-size:28px">Custom</div>
+        <div class="pricing-period">Large corporations & banks</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Unlimited everything</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Custom integrations</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>Dedicated support</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>SLA guarantee</li>
+          <li><span class="check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></span>White-label option</li>
+        </ul>
+        <a href="#feedback" class="pricing-btn pricing-btn-outline">Contact us</a>
+      </div>
+    </div>
+    <p class="pricing-note">Need just one analysis? <a href="index.html">Pay $3 per analysis</a> with no subscription.</p>
+  </div>
+</section>
+
+<section class="testimonials">
+  <div class="container">
+    <div class="fade-up">
+      <span class="section-badge">Testimonials</span>
+      <h2 class="section-title">Trusted by businesses across Africa</h2>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"I've been trying to understand my business finances for years. FinSight AI explained everything in plain English in under a minute. Incredible."</p>
+        <div class="testimonial-author"><div class="testimonial-avatar" style="background:#E1F5EE;color:#1D9E75">AM</div><div><div class="testimonial-name">Amina Mwangi</div><div class="testimonial-role">Founder, Nairobi Bakery</div></div></div>
+      </div>
+      <div class="testimonial-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"As an accountant, this saves me hours of work. I use it for quick first-pass analysis before client meetings. The recommendations are spot on."</p>
+        <div class="testimonial-author"><div class="testimonial-avatar" style="background:#E6F1FB;color:#185FA5">KO</div><div><div class="testimonial-name">Kofi Osei</div><div class="testimonial-role">CPA, Accra</div></div></div>
+      </div>
+      <div class="testimonial-card fade-up">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Used it to prepare for my bank loan application. It showed me exactly what the bank would see and what I needed to fix. Got the loan approved!"</p>
+        <div class="testimonial-author"><div class="testimonial-avatar" style="background:#FAEEDA;color:#BA7517">TN</div><div><div class="testimonial-name">Tunde Nwosu</div><div class="testimonial-role">SME Owner, Lagos</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="feedback" id="feedback">
+  <div class="container">
+    <div class="fade-up" style="text-align:center;margin-bottom:3rem">
+      <span class="section-badge">Community</span>
+      <h2 class="section-title">Help us build what you need</h2>
+      <p class="section-subtitle" style="margin:0 auto">Your feedback shapes FinSight AI. Tell us what you think, suggest features, and vote for what matters most.</p>
+    </div>
+    <div class="feedback-inner fade-up">
+      <div class="feedback-tabs">
+        <button class="feedback-tab active" onclick="switchTab('suggest')">💬 Send Feedback</button>
+        <button class="feedback-tab" onclick="switchTab('vote')">🗳️ Vote on Features</button>
+      </div>
+      <div id="tab-suggest">
+        <div class="feedback-form-wrap" id="feedbackForm">
+          <label>Your name</label>
+          <input type="text" placeholder="e.g. Amina Mwangi" id="fbName">
+          <label>Your email (optional)</label>
+          <input type="email" placeholder="e.g. amina@business.com" id="fbEmail">
+          <label>Type of feedback</label>
+          <select id="fbType">
+            <option value="">Select one...</option>
+            <option>Feature suggestion</option>
+            <option>Something isn't working</option>
+            <option>I love something!</option>
+            <option>I have a question</option>
+            <option>Other</option>
+          </select>
+          <label>Your message</label>
+          <textarea placeholder="Tell us what you think, what you'd love to see, or how we can improve..." id="fbMessage"></textarea>
+          <button class="feedback-submit" onclick="submitFeedback()">Send feedback →</button>
+        </div>
+        <div class="feedback-success" id="feedbackSuccess">
+          <div class="feedback-success-icon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+          <h3>Thank you so much! 🙏</h3>
+          <p>Your feedback means the world to us. We read every single message and use it to build a better product.</p>
+        </div>
+      </div>
+      <div id="tab-vote" style="display:none">
+        <div class="votes-list" id="votesList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2 class="section-title">Ready to understand<br>your finances?</h2>
+    <p>Join businesses getting clear financial insights in seconds. Start free today.</p>
+    <div class="cta-buttons">
+      <a href="index.html" class="btn-primary">Analyze your financials free →</a>
+      <a href="#feedback" class="btn-secondary">Share your feedback</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">FinSight <span>AI</span></div>
+    <div class="footer-links">
+      <a href="#">Privacy</a><a href="#">Terms</a><a href="#feedback">Contact</a><a href="index.html">App</a>
+    </div>
+    <div class="footer-copy">© 2025 FinSight AI. Financial intelligence for everyone.</div>
+  </div>
+</footer>
+
+<div class="chat-widget">
+  <div class="chat-popup" id="chatPopup">
+    <div class="chat-popup-header">
+      <div class="chat-avatar"><svg viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10"/></svg></div>
+      <div><div class="chat-name">FinSight Support</div><div class="chat-status">● Online now</div></div>
+    </div>
+    <div class="chat-body">
+      <div class="chat-message">Hi! 👋 I'm here to help. What would you like to know about FinSight AI?</div>
+      <div class="chat-options">
+        <button class="chat-option" onclick="selectChat(this)">How does the analysis work?</button>
+        <button class="chat-option" onclick="selectChat(this)">What file formats do you support?</button>
+        <button class="chat-option" onclick="selectChat(this)">How much does it cost?</button>
+        <button class="chat-option" onclick="selectChat(this)">I need help getting started</button>
+      </div>
+    </div>
+  </div>
+  <button class="chat-btn" onclick="toggleChat()">
+    <svg viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+  </button>
+</div>
+
+<script>
+const features = [
+  {title:'Financial forecasting & projections',desc:'Project future performance based on current trends',votes:47,tag:'popular',voted:false},
+  {title:'Download as PDF & Word doc',desc:'Export professional reports to share with stakeholders',votes:38,tag:'popular',voted:false},
+  {title:'Scenario modeling (what-if analysis)',desc:'See how changes in figures affect your financial health',votes:31,tag:'newf',voted:false},
+  {title:'Edit figures after analysis',desc:'Adjust numbers and instantly re-run the analysis',votes:28,tag:'newf',voted:false},
+  {title:'Multi-period comparison',desc:'Compare financials across different time periods',votes:24,tag:'newf',voted:false},
+  {title:'Tax filing guidance',desc:'Get help understanding your tax obligations from your financials',votes:19,tag:'newf',voted:false},
+  {title:'User accounts & saved history',desc:'Log in and track your financial health over time',votes:15,tag:'newf',voted:false},
+];
+
+function renderVotes(){
+  document.getElementById('votesList').innerHTML=features.sort((a,b)=>b.votes-a.votes).map((f,i)=>`
+    <div class="vote-item">
+      <button class="vote-btn ${f.voted?'voted':''}" onclick="vote(${i})">
+        <span class="vote-arrow">▲</span><span class="vote-count">${f.votes}</span>
+      </button>
+      <div class="vote-text"><div class="vote-title">${f.title}</div><div class="vote-desc">${f.desc}</div></div>
+      <span class="vote-tag ${f.tag}">${f.tag==='popular'?'🔥 Popular':'✨ New'}</span>
+    </div>`).join('');
+}
+
+function vote(i){
+  if(!features[i].voted){features[i].votes++;features[i].voted=true;renderVotes();}
+}
+
+function switchTab(tab){
+  document.querySelectorAll('.feedback-tab').forEach((t,i)=>t.classList.toggle('active',(tab==='suggest'&&i===0)||(tab==='vote'&&i===1)));
+  document.getElementById('tab-suggest').style.display=tab==='suggest'?'block':'none';
+  document.getElementById('tab-vote').style.display=tab==='vote'?'block':'none';
+}
+
+function submitFeedback(){
+  if(!document.getElementById('fbName').value||!document.getElementById('fbMessage').value){alert('Please fill in your name and message!');return;}
+  document.getElementById('feedbackForm').style.display='none';
+  document.getElementById('feedbackSuccess').style.display='block';
+}
+
+function toggleChat(){document.getElementById('chatPopup').classList.toggle('open');}
+function selectChat(btn){document.getElementById('chatPopup').querySelector('.chat-body').innerHTML='<div class="chat-message">Thanks for reaching out! Our team will get back to you shortly. Meanwhile, feel free to <a href="index.html" style="color:#1D9E75;">try the app for free</a>!</div>';}
+
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));
+
+setTimeout(()=>document.getElementById('scoreBar').style.width='78%',500);
+renderVotes();
+</script>
+</body>
+</html>
