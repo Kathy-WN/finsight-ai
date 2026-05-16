@@ -2,10 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
 
 const app = express();
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ storage: multer.memoryStorage() });
 
 app.use(express.json());
 app.use(express.static('.'));
@@ -20,8 +19,7 @@ app.post('/analyze', upload.single('file'), async (req, res) => {
     let messages;
 
     if (req.file) {
-      const fileBuffer = fs.readFileSync(req.file.path);
-      const base64 = fileBuffer.toString('base64');
+      const base64 = req.file.buffer.toString('base64');
       const isPDF = req.file.mimetype === 'application/pdf';
 
       if (isPDF) {
@@ -33,16 +31,14 @@ app.post('/analyze', upload.single('file'), async (req, res) => {
           ]
         }];
       } else {
-        const text = fileBuffer.toString('utf-8');
+        const text = req.file.buffer.toString('utf-8');
         messages = [{ role: 'user', content: 'Analyze this financial statement and return the JSON analysis as instructed.\n\n' + text }];
       }
-      fs.unlinkSync(req.file.path);
     } else {
       messages = [{ role: 'user', content: 'Analyze this financial statement and return the JSON analysis as instructed.\n\n' + pasteText }];
     }
 
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    console.log('API Key loaded:', apiKey ? 'YES' : 'NO');
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -60,8 +56,6 @@ app.post('/analyze', upload.single('file'), async (req, res) => {
     });
 
     const rawData = await response.text();
-    console.log('API Response:', rawData.substring(0, 200));
-
     const data = JSON.parse(rawData);
 
     if (data.error) {
