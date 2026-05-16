@@ -4,17 +4,13 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "*.html",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
-    {
-      "src": "/landing.html",
-      "dest": "/landing.html"
-    },
-    {
-      "src": "/index.html",
-      "dest": "/index.html"
-    },
     {
       "src": "/analyze",
       "dest": "server.js"
@@ -22,6 +18,10 @@
     {
       "src": "/",
       "dest": "/landing.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
     }
   ]
 }
