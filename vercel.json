@@ -8,8 +8,20 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/landing.html",
+      "dest": "/landing.html"
+    },
+    {
+      "src": "/index.html",
+      "dest": "/index.html"
+    },
+    {
+      "src": "/analyze",
       "dest": "server.js"
+    },
+    {
+      "src": "/",
+      "dest": "/landing.html"
     }
   ]
 }
