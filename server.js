@@ -49,7 +49,7 @@ app.post('/analyze', upload.single('file'), async (req, res) => {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1024,
+        max_tokens: 2048,
         system: 'You are an expert financial analyst. Analyze financial statements and return ONLY a valid JSON object with no preamble, no explanation, and no markdown code fences. The JSON must have this exact structure: {"company": "company name or Unknown", "period": "reporting period or Unknown", "overall_health": "Healthy or Concerning or Critical", "summary": "2-3 sentence plain English summary", "metrics": [{"label": "metric name", "value": "value with unit", "note": "brief context"}], "strengths": ["strength 1", "strength 2"], "red_flags": ["flag 1", "flag 2"], "recommendations": ["recommendation 1", "recommendation 2", "recommendation 3"]} Return ONLY the raw JSON object. Nothing else.',
         messages: messages
       })
